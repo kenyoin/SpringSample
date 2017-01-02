@@ -1,5 +1,8 @@
 package org.springframework.samples.mvc.async;
 
+/**
+ * TODO lombokにしたい
+ */
 public class JavaBean {
 
 	private String foo;

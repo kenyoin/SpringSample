@@ -56,6 +56,9 @@ public class CallableController {
 	@RequestMapping("/response-body")
 	public @ResponseBody Callable<String> callable() {
 
+		/*
+		 * http://qiita.com/kazuki43zoo/items/ce88dea403c596249e8a
+		 */
 		return new Callable<String>() {
 			@Override
 			public String call() throws Exception {
@@ -65,6 +68,16 @@ public class CallableController {
 		};
 	}
 
+	/**
+	 * このメソッドを起動するにはaction属性に「/async/callable/view」を設定し、submitする。
+	 *
+	 * @param model
+	 *            Springが用意するMapオブジェクトで、Viewに渡すオブジェクトを設定します。
+	 *            https://sites.google
+	 *            .com/site/soracane/home/springnitsuite/spring
+	 *            -mvc/04-ji-ben-gai-nian-controllerno-chu-lifuro
+	 * @return テンプレートパス
+	 */
 	@RequestMapping("/view")
 	public Callable<String> callableWithView(final Model model) {
 
@@ -72,13 +85,30 @@ public class CallableController {
 			@Override
 			public String call() throws Exception {
 				Thread.sleep(2000);
+
+				/*
+				 * model.addAttribute("送り先のビューでの識別子名", 送るオブジェクト);
+				 * http://d.hatena.ne.jp/tako222/20130719/1374239123
+				 */
 				model.addAttribute("foo", "bar");
 				model.addAttribute("fruit", "apple");
+
+				/*
+				 * メソッドの戻り値に、表示するテンプレートのパスを指定する。 テンプレートファイルは、クラスパス上の templates
+				 * パッケージの下に配置する。 コントローラのメソッドが返した文字列は、この templates
+				 * パッケージからの相対パスになる（拡張子は省略可）。
+				 */
 				return "views/html";
 			}
 		};
 	}
 
+	/**
+	 * http://kuwalab.hatenablog.jp/entry/spring_mvc/005
+	 * パラメータを必須としない場合には、required属性をfalseにするか、default属性を設定します。default属性を設定するとrequred属性は暗黙的にfalseになります。
+	 * @param handled
+	 * @return
+	 */
 	@RequestMapping("/exception")
 	public @ResponseBody Callable<String> callableWithException(
 			final @RequestParam(required=false, defaultValue="true") boolean handled) {
@@ -98,6 +128,11 @@ public class CallableController {
 		};
 	}
 
+	/**
+	 * http://m12i.hatenablog.com/entry/2014/11/17/222816
+	 * Callableの場合も同様に、適切なコンストラクタで初期化されたWebAsyncTaskでラップしてすることでタイムアウト値のカスタマイズが可能です。
+	 * @return
+	 */
 	@RequestMapping("/custom-timeout-handling")
 	public @ResponseBody WebAsyncTask<String> callableWithCustomTimeoutHandling() {
 
@@ -112,6 +147,14 @@ public class CallableController {
 		return new WebAsyncTask<String>(1000, callable);
 	}
 
+	/**
+	 * http://javatechnology.net/spring/spring_exceptionhandler/
+	 * エラーハンドリング「@ExceptionHandler」は、@ExceptionHandlerを実装したコントローラ内のみで有効(ハンドリングします)となります。
+	 * https://tech-sketch.jp/2013/01/spring-mvc%E3%81%A7exception%E3%82%92%E3%83%8F%E3%83%B3%E3%83%89%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B.html
+	 * @ExceptionHandlerの引数としてハンドリングしたい例外クラスを指定します。これは一つのハンドラメソッドで複数指定できます。
+	 * @param ex
+	 * @return
+	 */
 	@ExceptionHandler
 	@ResponseBody
 	public String handleException(IllegalStateException ex) {
