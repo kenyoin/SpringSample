@@ -16,8 +16,19 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/fileupload")
 public class FileUploadController {
 
+	/**
+	 * @param request org.springframework.web.context.request.WebRequestとorg.springframework.web.context.request.NativeWebRequest。
+	 * これらのオブジェクトを通じて、ネイティブのサーブレットAPIに縛られることなく、
+	 * リクエストやセッションの属性、みならずリクエスト・パラメータにもアクセスできるようになります。
+	 * http://m12i.hatenablog.com/entry/2014/11/16/173614
+	 * @param model
+	 */
 	@ModelAttribute
 	public void ajaxAttribute(WebRequest request, Model model) {
+		/*
+		 * リクエストがAjaxリクエストか判定。
+		 * リクエストヘッダーにX-Requested-Withが存在するか。
+		 */
 		model.addAttribute("ajaxRequest", AjaxUtils.isAjaxRequest(request));
 	}
 
@@ -25,9 +36,14 @@ public class FileUploadController {
 	public void fileUploadForm() {
 	}
 
+	/**
+	 *
+	 * @param file アップロードされたファイルは「org.springframework.web.multipart.MultipartFile」で受け取ります。
+	 * http://qiita.com/nvtomo1029/items/316c5e8fe5d0cd92339c
+	 */
 	@RequestMapping(method=RequestMethod.POST)
 	public void processUpload(@RequestParam MultipartFile file, Model model) throws IOException {
 		model.addAttribute("message", "File '" + file.getOriginalFilename() + "' uploaded successfully");
 	}
-	
+
 }
