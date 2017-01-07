@@ -22,7 +22,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class StandardArgumentsController {
 
 	// request related
-	
+
+	/**
+	 *
+	 * @param request リクエストされると値がこのオブジェクトに自動的に設定される。
+	 * http://stackoverflow.com/questions/8504258/spring-3-mvc-accessing-httprequest-from-controller
+	 * @param user 認証情報
+	 * http://itdoc.hitachi.co.jp/manuals/link/cosmi_v0870/APKX/EU080373.HTM
+	 * @param locale locale情報
+	 * @return
+	 */
 	@RequestMapping(value="/data/standard/request", method=RequestMethod.GET)
 	public @ResponseBody String standardRequestArgs(HttpServletRequest request, Principal user, Locale locale) {
 		StringBuilder buffer = new StringBuilder();
@@ -34,6 +43,10 @@ public class StandardArgumentsController {
 
 	@RequestMapping(value="/data/standard/request/reader", method=RequestMethod.POST)
 	public @ResponseBody String requestReader(Reader requestBodyReader) throws IOException {
+		/*
+		 * ここで使用したメソッドはcloseもしてくれるので、特にプログラマー側でclose処理する必要はありません。
+		 * https://sites.google.com/site/soracane/home/springnitsuite/spring-mvc/81-can-kao-appurodo-daunrodono-shi-zhuang-li
+		 */
 		return "Read char request body = " + FileCopyUtils.copyToString(requestBodyReader);
 	}
 
@@ -41,7 +54,7 @@ public class StandardArgumentsController {
 	public @ResponseBody String requestReader(InputStream requestBodyIs) throws IOException {
 		return "Read binary request body = " + new String(FileCopyUtils.copyToByteArray(requestBodyIs));
 	}
-	
+
 	// response related
 
 	@RequestMapping("/data/standard/response")
@@ -53,14 +66,17 @@ public class StandardArgumentsController {
 	public void availableStandardResponseArguments(Writer responseWriter) throws IOException {
 		responseWriter.write("Wrote char response using Writer");
 	}
-	
+
 	@RequestMapping("/data/standard/response/os")
 	public void availableStandardResponseArguments(OutputStream os) throws IOException {
 		os.write("Wrote binary response using OutputStream".getBytes());
 	}
-	
+
 	// HttpSession
 
+	/**
+	 * Sessionオブジェクトを取得
+	 */
 	@RequestMapping("/data/standard/session")
 	public @ResponseBody String session(HttpSession session) {
 		StringBuilder buffer = new StringBuilder();

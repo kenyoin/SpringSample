@@ -15,12 +15,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/convert")
 public class ConvertController {
 
+	/**
+	 * @param value
+	 * リクエストパラメータ（GETパラメータ＆POSTパラメータ）の取得
+	 * http://javatechnology.net/spring/requestparam/
+	 * @return
+	 */
 	@RequestMapping("primitive")
 	public @ResponseBody String primitive(@RequestParam Integer value) {
 		return "Converted primitive " + value;
 	}
 
 	// requires Joda-Time on the classpath
+	/**
+	 * @DateTimeFormatアノテーションを用いて日付と文字列の間の相互変換も処理できます。
+	 * http://d.hatena.ne.jp/ryoasai/20110503/1304424587
+	 * https://blog.ik.am/entries/375
+	 *
+	 * @param value
+	 * パラメータを動的に取得するときは、@PathVariableアノテーションを使う。
+	 * RequestMappingで指定したマッピングとひも付けを行う。
+	 * http://blog.codebook-10000.com/entry/20140301/1393628782
+	 * @return
+	 */
 	@RequestMapping("date/{value}")
 	public @ResponseBody String date(@PathVariable @DateTimeFormat(iso=ISO.DATE) Date value) {
 		return "Converted date " + value;
