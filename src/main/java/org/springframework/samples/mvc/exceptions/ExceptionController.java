@@ -18,6 +18,11 @@ public class ExceptionController {
 		throw new BusinessException();
 	}
 
+	/**
+	 * Controller内にExceptionHandlerアノテーションを付与したメソッドを定義すると、
+	 * そのController内で指定の型の例外がthrowされた場合にハンドリングできる。
+	 * http://qiita.com/nenokido2000/items/91c39e4aa5cbd9dfacef
+	 */
 	@ExceptionHandler
 	public @ResponseBody String handle(IllegalStateException e) {
 		return "IllegalStateException handled!";
