@@ -9,19 +9,37 @@ import javax.validation.constraints.Past;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
 import org.springframework.samples.mvc.convert.MaskFormat;
 
 public class FormBean {
-	
+
+	/**
+	 * ×はチェックエラー、○は許可
+	 * 			Null	""(空文字)	空白のみ
+	 * @NotNull		×	○	○
+	 * @NotEmpty	×	×	○
+	 * @NotBlank	×	×	×
+	 * http://n-agetsuma.hatenablog.com/entry/2012/10/14/010410
+	 */
 	@NotEmpty
 	private String name;
-	
+
+	/**
+	 * 最小値を指定するアノテーションです。現在は、int, long, Integer, Long 型をサポートしています。
+	 * http://d.hatena.ne.jp/beyondseeker/20090427/1240840737
+	 */
 	@Min(21)
 	private int age;
 
+	/**
+	 * @DateTimeFormatアノテーションを用いて日付と文字列の間の相互変換も処理できます。
+	 * http://d.hatena.ne.jp/ryoasai/20110503/1304424587
+	 *
+	 * yyyy-MM-ddで設定
+	 */
 	@DateTimeFormat(iso=ISO.DATE)
 	@Past
 	private Date birthDate;
@@ -34,13 +52,13 @@ public class FormBean {
 
 	@NumberFormat(style=Style.PERCENT)
 	private BigDecimal percent;
-	
+
 	private InquiryType inquiry;
-	
+
 	private String inquiryDetails;
-	
+
 	private boolean subscribeNewsletter;
-	
+
 	private Map<String, String> additionalInfo;
 
     public String getName() {
