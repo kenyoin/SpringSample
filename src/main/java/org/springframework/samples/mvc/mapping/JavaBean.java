@@ -2,6 +2,11 @@ package org.springframework.samples.mvc.mapping;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * クラスに付いている@XMLRootElementというアノテーションがポイントです。
+ * @XMLRootElementを付けることで、このクラスはXMLのルート要素になりますよ、って意味になります。
+ * http://murayama.hatenablog.com/entry/20100829/1283051083
+ */
 @XmlRootElement
 public class JavaBean {
 
